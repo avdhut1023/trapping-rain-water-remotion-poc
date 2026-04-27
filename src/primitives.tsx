@@ -35,7 +35,7 @@ const getBarGeometry = (width: number, values: number[]) => {
 export const TextPrimitive: React.FC<PrimitiveProps> = ({element, scene, spec, frame}) => {
   const {fps, width} = useVideoConfig();
   const style = resolveStyle(element.style, spec);
-  const opacity = fadeOpacity(frame, fps, scene, element.id, false);
+  const opacity = fadeOpacity(frame, fps, scene, element.id, false, element.id === 'title' ? 0.15 : 0);
   const scale = pulseScale(frame, fps, scene, element.id);
 
   return (
