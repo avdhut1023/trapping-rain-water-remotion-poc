@@ -32,12 +32,20 @@ export const getActions = (scene: any, actionName: string, targetId: string) => 
   return scene.actions.filter((a: any) => a.action === actionName && a.target === targetId);
 };
 
-export const fadeOpacity = (frame: number, fps: number, scene: any, targetId: string, defaultVisible = true) => {
+export const fadeOpacity = (
+  frame: number,
+  fps: number,
+  scene: any,
+  targetId: string,
+  defaultVisible = true,
+  minVisibleBeforeStart = 0
+) => {
   const action = getAction(scene, 'FADE_IN', targetId);
   if (!action) return defaultVisible ? 1 : 0;
 
   const start = msToFrame(action.atMs, fps);
   const end = msToFrame(action.atMs + action.durationMs, fps);
+  if (frame <= start) return minVisibleBeforeStart;
   return interpolate(frame, [start, end], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
 };
 
