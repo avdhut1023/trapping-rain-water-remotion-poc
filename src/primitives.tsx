@@ -19,6 +19,18 @@ type PrimitiveProps = {
 };
 
 const getX = (x: any, width: number) => (x === 'center' ? width / 2 : x);
+const BAR_WIDTH = 78;
+const BAR_GAP = 18;
+const BAR_STROKE_WIDTH = 2;
+const WATER_INSET = 4;
+
+const getBarGeometry = (width: number, values: number[]) => {
+  const totalWidth = values.length * BAR_WIDTH + (values.length - 1) * BAR_GAP;
+  return {
+    startX: centerX(width, totalWidth),
+    totalWidth,
+  };
+};
 
 export const TextPrimitive: React.FC<PrimitiveProps> = ({element, scene, spec, frame}) => {
   const {fps, width} = useVideoConfig();
@@ -79,10 +91,7 @@ export const BarGraphPrimitive: React.FC<PrimitiveProps> = ({element, scene, spe
   const style = element.style ?? {};
   const values = element.values;
   const unitHeightPx = style.scale?.unitHeightPx ?? 100;
-  const barWidth = 78;
-  const gap = 18;
-  const totalWidth = values.length * barWidth + (values.length - 1) * gap;
-  const startX = centerX(width, totalWidth);
+  const {startX} = getBarGeometry(width, values);
   const baselineY = element.position.y;
   const maxVal = Math.max(...values);
   const action = getAction(scene, 'BUILD_BAR_GRAPH_FROM_VALUES', element.id);
@@ -96,7 +105,7 @@ export const BarGraphPrimitive: React.FC<PrimitiveProps> = ({element, scene, spe
           ? animatedProgress(frame, fps, localStart, Math.max(300, action.durationMs - index * delayMs))
           : 1;
         const barHeight = value * unitHeightPx * progress;
-        const x = startX + index * (barWidth + gap);
+        const x = startX + index * (BAR_WIDTH + BAR_GAP);
         const y = baselineY - barHeight;
         const isPeak = value === maxVal;
 
@@ -107,7 +116,7 @@ export const BarGraphPrimitive: React.FC<PrimitiveProps> = ({element, scene, spe
                 position: 'absolute',
                 left: x,
                 top: y,
-                width: barWidth,
+                width: BAR_WIDTH,
                 height: barHeight,
                 background: isPeak ? resolveToken(style.barHighlightColor, spec) : resolveToken(style.barColor, spec),
                 border: `2px solid ${resolveToken(style.barStroke, spec) ?? spec.theme.colors.surfaceStrong}`,
@@ -119,7 +128,7 @@ export const BarGraphPrimitive: React.FC<PrimitiveProps> = ({element, scene, spe
               <div
                 style={{
                   position: 'absolute',
-                  left: x + barWidth / 2,
+                  left: x + BAR_WIDTH / 2,
                   top: y - 28,
                   transform: 'translateX(-50%)',
                   color: resolveToken(style.labelColor, spec) ?? spec.theme.colors.textSecondary,
@@ -134,7 +143,7 @@ export const BarGraphPrimitive: React.FC<PrimitiveProps> = ({element, scene, spe
               <div
                 style={{
                   position: 'absolute',
-                  left: x + barWidth / 2,
+                  left: x + BAR_WIDTH / 2,
                   top: baselineY + 14,
                   transform: 'translateX(-50%)',
                   color: spec.theme.colors.textMuted,
@@ -158,18 +167,19 @@ export const WaterOverlayPrimitive: React.FC<PrimitiveProps> = ({element, scene,
   if (!barElement) return null;
 
   const values = barElement.values;
-  const waterValues = element.waterValues;
+  const action = getAction(scene, 'FILL_REMAINING_WATER_SEQUENTIALLY', element.id);
+  const valuesFromAction = action?.options?.waterValues ?? {};
+  const waterValues = element.waterValues.map((water: number, index: number) =>
+    valuesFromAction[index] === undefined ? water : valuesFromAction[index]
+  );
   const barStyle = barElement.style ?? {};
   const waterStyle = element.style ?? {};
   const unitHeightPx = barStyle.scale?.unitHeightPx ?? 100;
-  const barWidth = 78;
-  const gap = 18;
-  const totalWidth = values.length * barWidth + (values.length - 1) * gap;
-  const startX = centerX(width, totalWidth);
+  const {startX} = getBarGeometry(width, values);
   const baselineY = barElement.position.y;
-  const action = getAction(scene, 'FILL_REMAINING_WATER_SEQUENTIALLY', element.id);
   const delayMs = action?.options?.delayPerIndexMs ?? 500;
   const indices = action?.options?.indices ?? [];
+  const pulse = pulseScale(frame, fps, scene, element.id);
 
   return (
     <div style={{position: 'absolute', left: 0, top: 0}}>
@@ -183,26 +193,46 @@ export const WaterOverlayPrimitive: React.FC<PrimitiveProps> = ({element, scene,
           : 1;
 
         const currentWaterHeight = water * unitHeightPx * progress;
-        const x = startX + index * (barWidth + gap);
+        const x = startX + index * (BAR_WIDTH + BAR_GAP);
         const topOfBar = baselineY - values[index] * unitHeightPx;
-        const y = topOfBar - currentWaterHeight;
+        const y = topOfBar - currentWaterHeight + BAR_STROKE_WIDTH;
+        const waterWidth = BAR_WIDTH - WATER_INSET * 2;
+        const safeHeight = Math.max(0, currentWaterHeight - BAR_STROKE_WIDTH);
 
         return (
           <div
             key={index}
             style={{
               position: 'absolute',
-              left: x,
+              left: x + WATER_INSET,
               top: y,
-              width: barWidth,
-              height: currentWaterHeight,
+              width: waterWidth,
+              height: safeHeight,
               opacity: waterStyle.opacity ?? 0.72,
               background: `linear-gradient(180deg, ${resolveToken(waterStyle.waterColor, spec)}, ${resolveToken(waterStyle.waterDeepColor, spec)})`,
               border: `2px solid ${resolveToken(waterStyle.strokeColor, spec)}`,
               borderRadius: '10px 10px 4px 4px',
               boxShadow: `0 0 20px ${resolveToken(waterStyle.waterColor, spec)}`,
+              transformOrigin: 'bottom center',
+              transform: `scale(${pulse})`,
+              overflow: 'hidden',
             }}
-          />
+          >
+            {waterStyle.waveEffect && (
+              <div
+                style={{
+                  position: 'absolute',
+                  left: '-30%',
+                  top: 0,
+                  width: '160%',
+                  height: '36%',
+                  background:
+                    'radial-gradient(ellipse at center, rgba(255,255,255,0.45) 0%, rgba(255,255,255,0) 70%)',
+                  opacity: 0.55,
+                }}
+              />
+            )}
+          </div>
         );
       })}
     </div>
