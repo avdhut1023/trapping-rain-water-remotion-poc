@@ -1,0 +1,22 @@
+{
+  "name": "trapping-rain-water-remotion-poc",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Minimal Remotion POC that renders Trapping Rain Water Scene 5 from JSON video spec.",
+  "scripts": {
+    "start": "remotion studio src/index.ts",
+    "render": "remotion render src/index.ts TrappingRainWaterPoc out/trapping-rain-water-poc-v1.mp4",
+    "still": "remotion still src/index.ts TrappingRainWaterPoc out/preview.png --frame=300"
+  },
+  "dependencies": {
+    "@remotion/cli": "^4.0.0",
+    "remotion": "^4.0.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
+    "typescript": "^5.4.0"
+  }
+}

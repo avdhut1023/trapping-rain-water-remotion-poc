@@ -1,0 +1,696 @@
+{
+  "specVersion": "video-spec-v1",
+  "project": {
+    "projectId": "trapping-rain-water-poc",
+    "title": "Trapping Rain Water - Final Summary POC",
+    "description": "One-scene POC validating bar graph, water overlay, helper arrays, final answer, counter animation, and narration-ready timing.",
+    "topic": "Trapping Rain Water",
+    "problemSource": "LeetCode 42",
+    "videoType": "algorithm_explainer",
+    "difficulty": "medium",
+    "audience": "DSA interview preparation",
+    "language": "en",
+    "createdBy": "manual-poc"
+  },
+  "renderSettings": {
+    "format": "mp4",
+    "aspectRatio": "16:9",
+    "width": 1920,
+    "height": 1080,
+    "fps": 30,
+    "durationMs": 18000,
+    "durationFrames": 540,
+    "renderer": {
+      "engine": "remotion",
+      "compositionId": "TrappingRainWaterPoc",
+      "entrySceneId": "scene-05-poc-final-summary"
+    },
+    "encoding": {
+      "videoCodec": "h264",
+      "audioCodec": "aac",
+      "pixelFormat": "yuv420p",
+      "outputFileName": "trapping-rain-water-poc-v1.mp4"
+    },
+    "safeArea": {
+      "top": 60,
+      "right": 60,
+      "bottom": 60,
+      "left": 60
+    }
+  },
+  "theme": {
+    "themeId": "dark-education-blue-orange-v1",
+    "mode": "dark",
+    "fontFamily": {
+      "heading": "Inter, Arial, sans-serif",
+      "body": "Inter, Arial, sans-serif",
+      "mono": "JetBrains Mono, Consolas, monospace"
+    },
+    "colors": {
+      "background": "#0B1020",
+      "surface": "#111827",
+      "surfaceSoft": "#1F2937",
+      "surfaceStrong": "#334155",
+      "textPrimary": "#F8FAFC",
+      "textSecondary": "#CBD5E1",
+      "textMuted": "#94A3B8",
+      "barDefault": "#64748B",
+      "barHighlight": "#F59E0B",
+      "water": "#38BDF8",
+      "waterDeep": "#0284C7",
+      "waterStroke": "#7DD3FC",
+      "accent": "#F59E0B",
+      "accentSoft": "#FCD34D",
+      "success": "#22C55E",
+      "danger": "#EF4444",
+      "arrayCell": "#1E293B",
+      "arrayCellBorder": "#475569",
+      "arrayCellHighlight": "#F59E0B",
+      "formulaText": "#E0F2FE",
+      "answerCardBg": "#064E3B",
+      "answerCardBorder": "#34D399",
+      "calloutBg": "#1E3A8A",
+      "calloutBorder": "#60A5FA"
+    },
+    "typography": {
+      "titleFontSize": 50,
+      "subtitleFontSize": 32,
+      "bodyFontSize": 28,
+      "labelFontSize": 22,
+      "smallFontSize": 18
+    },
+    "animationDefaults": {
+      "fadeDurationMs": 700,
+      "pulseDurationMs": 900,
+      "easing": "easeOutCubic"
+    }
+  },
+  "data": {
+    "height": [
+      0,
+      1,
+      0,
+      2,
+      1,
+      0,
+      1,
+      3,
+      2,
+      1,
+      2,
+      1
+    ],
+    "prefixMax": [
+      0,
+      1,
+      1,
+      2,
+      2,
+      2,
+      2,
+      3,
+      3,
+      3,
+      3,
+      3
+    ],
+    "postfixMax": [
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      2,
+      2,
+      2,
+      1
+    ],
+    "water": [
+      0,
+      0,
+      1,
+      0,
+      1,
+      2,
+      1,
+      0,
+      0,
+      1,
+      0,
+      0
+    ],
+    "totalWater": 6,
+    "waterIndices": [
+      2,
+      4,
+      5,
+      6,
+      9
+    ],
+    "maxHeight": 3
+  },
+  "narrationSettings": {
+    "enabled": true,
+    "voiceProvider": "manual-placeholder",
+    "voiceId": "default-educational-voice",
+    "speakingRate": 1.0,
+    "pitch": 0,
+    "audioFormat": "mp3",
+    "syncStrategy": "scene_timeline_ms",
+    "segments": [
+      {
+        "segmentId": "narration-scene-05",
+        "sceneId": "scene-05-poc-final-summary",
+        "startMs": 0,
+        "endMs": 17000,
+        "text": "This is the final result. The height array creates the bars. The prefix max array gives the best left boundary, and the postfix max array gives the best right boundary. Using both boundaries, we compute the water array. Water is trapped at indices two, four, five, six, and nine. When we add those values, the total trapped rain water is six units.",
+        "estimatedDurationMs": 17000
+      }
+    ]
+  },
+  "primitiveRegistry": {
+    "supportedPrimitives": [
+      "TEXT",
+      "BAR_GRAPH",
+      "WATER_OVERLAY",
+      "ARRAY",
+      "COUNTER",
+      "ANSWER_CARD",
+      "CALLOUT"
+    ]
+  },
+  "actionRegistry": {
+    "supportedActions": [
+      "FADE_IN",
+      "BUILD_BAR_GRAPH_FROM_VALUES",
+      "FILL_REMAINING_WATER_SEQUENTIALLY",
+      "HIGHLIGHT_ARRAY_CELLS",
+      "UPDATE_COUNTER",
+      "PULSE_HIGHLIGHT"
+    ]
+  },
+  "scenes": [
+    {
+      "sceneId": "scene-05-poc-final-summary",
+      "sceneOrder": 1,
+      "sceneType": "POC_FINAL_SUMMARY_ALL_IN_ONE",
+      "title": "Final Trapped Water",
+      "goal": "Show the full trapping rain water result using bar graph, water overlay, helper arrays, and final answer.",
+      "durationMs": 18000,
+      "layout": {
+        "aspectRatio": "16:9",
+        "background": "theme.colors.background",
+        "safeMargin": 60,
+        "graphRegion": {
+          "x": 160,
+          "y": 130,
+          "width": 1500,
+          "height": 470
+        },
+        "arrayFooterRegion": {
+          "x": 160,
+          "y": 650,
+          "width": 1500,
+          "height": 300
+        }
+      },
+      "elements": [
+        {
+          "id": "title",
+          "type": "TEXT",
+          "text": "Final Trapped Water",
+          "position": {
+            "x": "center",
+            "y": 70
+          },
+          "style": {
+            "fontSize": 50,
+            "weight": "bold",
+            "color": "theme.colors.textPrimary"
+          }
+        },
+        {
+          "id": "barGraph",
+          "type": "BAR_GRAPH",
+          "values": [
+            0,
+            1,
+            0,
+            2,
+            1,
+            0,
+            1,
+            3,
+            2,
+            1,
+            2,
+            1
+          ],
+          "position": {
+            "x": "center",
+            "y": 580
+          },
+          "style": {
+            "barColor": "theme.colors.barDefault",
+            "barHighlightColor": "theme.colors.barHighlight",
+            "barStroke": "theme.colors.surfaceStrong",
+            "showValueLabels": true,
+            "showIndexLabels": true,
+            "labelColor": "theme.colors.textSecondary",
+            "scale": {
+              "unitHeightPx": 110
+            }
+          }
+        },
+        {
+          "id": "waterOverlay",
+          "type": "WATER_OVERLAY",
+          "waterValues": [
+            0,
+            0,
+            1,
+            0,
+            1,
+            2,
+            1,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          "attachedTo": "barGraph",
+          "style": {
+            "waterColor": "theme.colors.water",
+            "waterDeepColor": "theme.colors.waterDeep",
+            "strokeColor": "theme.colors.waterStroke",
+            "opacity": 0.72,
+            "waveEffect": true
+          }
+        },
+        {
+          "id": "heightArray",
+          "type": "ARRAY",
+          "label": "height",
+          "values": [
+            0,
+            1,
+            0,
+            2,
+            1,
+            0,
+            1,
+            3,
+            2,
+            1,
+            2,
+            1
+          ],
+          "position": {
+            "x": "center",
+            "y": 660
+          },
+          "cellStyle": {
+            "width": 58,
+            "height": 48,
+            "fontSize": 22,
+            "fillColor": "theme.colors.arrayCell",
+            "borderColor": "theme.colors.arrayCellBorder",
+            "textColor": "theme.colors.textPrimary",
+            "labelColor": "theme.colors.textSecondary"
+          }
+        },
+        {
+          "id": "prefixArray",
+          "type": "ARRAY",
+          "label": "prefixMax",
+          "values": [
+            0,
+            1,
+            1,
+            2,
+            2,
+            2,
+            2,
+            3,
+            3,
+            3,
+            3,
+            3
+          ],
+          "position": {
+            "x": "center",
+            "y": 725
+          },
+          "cellStyle": {
+            "width": 58,
+            "height": 48,
+            "fontSize": 22,
+            "fillColor": "theme.colors.surfaceSoft",
+            "borderColor": "theme.colors.accent",
+            "textColor": "theme.colors.textPrimary",
+            "labelColor": "theme.colors.accentSoft"
+          }
+        },
+        {
+          "id": "postfixArray",
+          "type": "ARRAY",
+          "label": "postfixMax",
+          "values": [
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            2,
+            2,
+            2,
+            1
+          ],
+          "position": {
+            "x": "center",
+            "y": 790
+          },
+          "cellStyle": {
+            "width": 58,
+            "height": 48,
+            "fontSize": 22,
+            "fillColor": "theme.colors.surfaceSoft",
+            "borderColor": "theme.colors.waterStroke",
+            "textColor": "theme.colors.textPrimary",
+            "labelColor": "theme.colors.waterStroke"
+          }
+        },
+        {
+          "id": "waterArray",
+          "type": "ARRAY",
+          "label": "water",
+          "values": [
+            0,
+            0,
+            1,
+            0,
+            1,
+            2,
+            1,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          "position": {
+            "x": "center",
+            "y": 855
+          },
+          "cellStyle": {
+            "width": 58,
+            "height": 48,
+            "fontSize": 22,
+            "fillColor": "theme.colors.arrayCell",
+            "borderColor": "theme.colors.water",
+            "textColor": "theme.colors.textPrimary",
+            "labelColor": "theme.colors.water"
+          }
+        },
+        {
+          "id": "totalCounter",
+          "type": "COUNTER",
+          "label": "Total Water",
+          "value": 0,
+          "position": {
+            "x": 1510,
+            "y": 170
+          },
+          "style": {
+            "fontSize": 34,
+            "weight": "bold",
+            "color": "theme.colors.accentSoft",
+            "labelColor": "theme.colors.textSecondary"
+          }
+        },
+        {
+          "id": "answerCard",
+          "type": "ANSWER_CARD",
+          "title": "Answer",
+          "value": "6 units",
+          "position": {
+            "x": 1510,
+            "y": 300
+          },
+          "style": {
+            "width": 360,
+            "height": 150,
+            "fontSize": 46,
+            "weight": "bold",
+            "backgroundColor": "theme.colors.answerCardBg",
+            "borderColor": "theme.colors.answerCardBorder",
+            "titleColor": "theme.colors.textSecondary",
+            "valueColor": "theme.colors.textPrimary"
+          }
+        },
+        {
+          "id": "summaryCallout",
+          "type": "CALLOUT",
+          "text": "Water is trapped where both left and right boundaries exist.",
+          "position": {
+            "x": "center",
+            "y": 960
+          },
+          "style": {
+            "fontSize": 28,
+            "backgroundColor": "theme.colors.calloutBg",
+            "borderColor": "theme.colors.calloutBorder",
+            "color": "theme.colors.textPrimary"
+          }
+        }
+      ],
+      "actions": [
+        {
+          "atMs": 0,
+          "action": "FADE_IN",
+          "target": "title",
+          "durationMs": 700
+        },
+        {
+          "atMs": 900,
+          "action": "BUILD_BAR_GRAPH_FROM_VALUES",
+          "target": "barGraph",
+          "durationMs": 2500,
+          "options": {
+            "animation": "growFromBottom",
+            "delayPerBarMs": 100
+          }
+        },
+        {
+          "atMs": 3600,
+          "action": "FADE_IN",
+          "target": "heightArray",
+          "durationMs": 500
+        },
+        {
+          "atMs": 4300,
+          "action": "FADE_IN",
+          "target": "prefixArray",
+          "durationMs": 500
+        },
+        {
+          "atMs": 5000,
+          "action": "FADE_IN",
+          "target": "postfixArray",
+          "durationMs": 500
+        },
+        {
+          "atMs": 5700,
+          "action": "FADE_IN",
+          "target": "waterArray",
+          "durationMs": 500
+        },
+        {
+          "atMs": 6800,
+          "action": "FILL_REMAINING_WATER_SEQUENTIALLY",
+          "target": "waterOverlay",
+          "durationMs": 3600,
+          "options": {
+            "indices": [
+              2,
+              4,
+              5,
+              6,
+              9
+            ],
+            "waterValues": {
+              "2": 1,
+              "4": 1,
+              "5": 2,
+              "6": 1,
+              "9": 1
+            },
+            "delayPerIndexMs": 600
+          }
+        },
+        {
+          "atMs": 7600,
+          "action": "HIGHLIGHT_ARRAY_CELLS",
+          "target": "waterArray",
+          "durationMs": 3000,
+          "options": {
+            "indices": [
+              2,
+              4,
+              5,
+              6,
+              9
+            ],
+            "mode": "sequential",
+            "highlightColor": "theme.colors.arrayCellHighlight"
+          }
+        },
+        {
+          "atMs": 10800,
+          "action": "FADE_IN",
+          "target": "totalCounter",
+          "durationMs": 500
+        },
+        {
+          "atMs": 11500,
+          "action": "UPDATE_COUNTER",
+          "target": "totalCounter",
+          "durationMs": 1800,
+          "options": {
+            "from": 0,
+            "to": 6
+          }
+        },
+        {
+          "atMs": 13700,
+          "action": "FADE_IN",
+          "target": "answerCard",
+          "durationMs": 700
+        },
+        {
+          "atMs": 14600,
+          "action": "PULSE_HIGHLIGHT",
+          "target": "answerCard",
+          "durationMs": 900
+        },
+        {
+          "atMs": 15700,
+          "action": "FADE_IN",
+          "target": "summaryCallout",
+          "durationMs": 700
+        },
+        {
+          "atMs": 16600,
+          "action": "PULSE_HIGHLIGHT",
+          "target": "waterOverlay",
+          "durationMs": 900
+        }
+      ],
+      "narration": {
+        "segmentId": "narration-scene-05",
+        "text": "This is the final result. The height array creates the bars. The prefix max array gives the best left boundary, and the postfix max array gives the best right boundary. Using both boundaries, we compute the water array. Water is trapped at indices two, four, five, six, and nine. When we add those values, the total trapped rain water is six units.",
+        "estimatedDurationMs": 17000
+      },
+      "qualityChecks": [
+        {
+          "rule": "HEIGHT_ARRAY_MATCHES_INPUT",
+          "expected": [
+            0,
+            1,
+            0,
+            2,
+            1,
+            0,
+            1,
+            3,
+            2,
+            1,
+            2,
+            1
+          ]
+        },
+        {
+          "rule": "PREFIX_MAX_MATCHES_EXPECTED",
+          "expected": [
+            0,
+            1,
+            1,
+            2,
+            2,
+            2,
+            2,
+            3,
+            3,
+            3,
+            3,
+            3
+          ]
+        },
+        {
+          "rule": "POSTFIX_MAX_MATCHES_EXPECTED",
+          "expected": [
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            2,
+            2,
+            2,
+            1
+          ]
+        },
+        {
+          "rule": "WATER_VALUES_MATCH_EXPECTED",
+          "expected": [
+            0,
+            0,
+            1,
+            0,
+            1,
+            2,
+            1,
+            0,
+            0,
+            1,
+            0,
+            0
+          ]
+        },
+        {
+          "rule": "TOTAL_WATER_MATCHES_EXPECTED",
+          "expected": 6
+        },
+        {
+          "rule": "SCENE_CONTAINS_FINAL_ANSWER",
+          "expected": true
+        },
+        {
+          "rule": "TEXT_NOT_OVERLOADED",
+          "maxVisibleTextBlocks": 6
+        },
+        {
+          "rule": "DURATION_MATCHES_NARRATION",
+          "allowedDriftMs": 1500
+        }
+      ]
+    }
+  ],
+  "exportPackage": {
+    "includeJsonSpec": true,
+    "includeVideo": true,
+    "includeAudio": true,
+    "includeCaptions": true,
+    "includeThumbnail": true
+  }
+}
